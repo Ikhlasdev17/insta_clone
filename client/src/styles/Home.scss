@@ -1,0 +1,110 @@
+@import './_variables';
+
+.home-row {
+  display: flex;
+  margin: 30px auto;
+  gap: 30px;
+
+  .post {
+    width: 100%;
+    border: 1px solid $borderColor;
+    width: 470px;
+    border-radius: 8px;
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      .post__author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .post-more {
+        cursor: pointer;
+      }
+    }
+
+    .post-img {
+      width: 100%;
+    }
+
+    .post-body {
+      &__header{
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      &__icons{
+        display: flex;
+        justify-content: space-between;
+        .pb-icons {
+          display: flex;
+          gap: 20px;
+        }
+      }
+    }
+    
+    .post-info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+
+      .more-btn {
+        color: $gray;
+        margin-left: 5px;
+        cursor: pointer;
+      }
+
+      .comments-text {
+        color: $gray;
+        cursor: pointer;
+      }
+    }
+
+
+    .post-footer {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      border-top: 1px solid $borderColor;
+      form {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+
+      }
+      input {
+        width: 100%;
+        padding: 0 15px;
+      }
+
+      button {
+        cursor: pointer;
+        background-color: transparent;
+        outline: none;
+        border: none;
+        color: $blue;
+        cursor: pointer;  
+      }
+    }
+  }
+}
+
+
+.sidebar {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0;
+}
+
+.text-blue {
+  color: $blue;
+}
