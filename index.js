@@ -8,12 +8,16 @@ const postRouter = require("./routes/postsRoute")
 const userRouter = require("./routes/userRoute")
 const path = require("path")
 const port = process.env.port || 5000
+const ip = require("ip")
+const ipAddress = ip.address();
 
 app.use(express.json())
 app.use(cors())
 app.use('/api/auth', authRouter)
 app.use('/api/post', postRouter)
 app.use('/api/user', userRouter)
+
+ 
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static('client/build'))
@@ -37,4 +41,4 @@ function connectDB(){
 
 connectDB()
 
-app.listen(port , ()=> console.log('> Server is up and running on port : ' + port))
+app.listen(port , ()=> console.log(`http://${ipAddress}:${port}`))

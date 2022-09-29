@@ -61,38 +61,28 @@ exports.getSinglePost = async (req, res) => {
 
 exports.updatePost = async (req, res) => {
   try {
- 
     const doMatch = req.post.author.toString() === req.user.id.toString()
-
     if (!doMatch) return res.status(401).json({ message: "You can update only your posts!" }) 
-
     Post.findByIdAndUpdate(req.params.id, req.body)
     .populate("author", "_id username photo email")
     .populate("comments.commentBy","_id photo username email")
       .exec((err, result) => {
         if (err) return res.status(400).json({ message: "Failed to update post!" })
-
         return res.status(200).json({ message:"Post updated" })
       }) 
     } catch (error) {
       return res.status(400).json({ message: "Failed to update post!" })
-    
   }
 }
 
 exports.deletePost = async (req, res) => {
   try {
-
     const post = await Post.findById(req.params.id)
-    
     const doMatch = post?.author.toString() === req.user.id.toString()
-
     if (!doMatch) return res.status(401).json({ message: "You can delete only your posts!" })
-
     Post.findByIdAndRemove(req.params.id)
       .exec((err, result) => {
         if (err) return res.status(400).json({ message: "Failed to delete post" })
-        
         return res.status(200).json({ message: "Post deleted!" })
       })
     } catch (error) {
@@ -103,13 +93,10 @@ exports.deletePost = async (req, res) => {
 exports.getMySubPost = async (req, res) => {
   try {
     const user = await User.findById(req.user.id)
-
     const posts = await Post.find({ author: { $in:user.followings }})
     .populate("author", "_id username photo email")
     .populate("comments.commentBy","_id photo username email")
-      
     res.status(200).json({ message: "Success", posts })
-
   } catch (error) {
     return res.status(400).json({ message: "Posts not found!" })
   }
