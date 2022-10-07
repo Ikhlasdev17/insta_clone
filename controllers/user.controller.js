@@ -9,6 +9,8 @@ exports.follow = async (req, res) => {
     }, {
       new: true
     })
+    .populate("followers", "_id username photo email")
+    .populate("followings", "_id username photo email")
     .exec((err, result) => {
       if (err) return res.status(400).json({ message: "Failed to follow user!" })
       
@@ -27,6 +29,37 @@ exports.follow = async (req, res) => {
     return res.status(400).json({ message: "Failed to follow user" })
   }
 }
+
+exports.unfollow = async (req, res) => {
+  try {
+    if (req.anyUser._id.toString() === req.user.id.toString()) return res.status(401).json({ message: "You can't unfollow yourself! " })
+
+    User.findByIdAndUpdate(req.params.id, {
+      $pull: { followers: req.user.id }
+    }, {
+      new: true
+    })
+    .populate("followers", "_id username photo email")
+    .populate("followings", "_id username photo email")
+    .exec((err, result) => {
+      if (err) return res.status(400).json({ message: "Failed to follow user!" })
+      
+      User.findByIdAndUpdate(req.user.id, {
+        $pull: { followings: req.params.id }
+      },{
+        new: true
+      })
+      .exec((err2, result2) => {
+        if (err2) return res.status(400).json({ message: "Failed to follow user!" })
+        res.status(200).json({ message: "Followed success!", payload: result })
+      })
+    })
+
+  } catch (error) {
+    return res.status(400).json({ message: "Failed to follow user" })
+  }
+}
+
 
 exports.getAllUsers = async (req, res) => {
   try {

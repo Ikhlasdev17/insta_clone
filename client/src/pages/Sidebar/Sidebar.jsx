@@ -6,17 +6,58 @@ import sidebarHead from '../../assets/images/pic2.png';
 import pic from '../../assets/images/profile.png'
 import axios from '../../assets/api/auth'
 import { Link } from 'react-router-dom';
+import { followUser, unFollowUser } from '../../utils/followUser';
 const Sidebar = () => {
   const {user} = useSelector(state => state.auth)
   const [users, setUsers] = useState([])
-
+  const [followLoading, setFollowLoading] = useState(false)
   useEffect(() => {
     axios.get('/user/all')
       .then((res) => {
         setUsers(res?.data?.users)
       })
   }, [])
-  console.log(users);
+
+  const followingHandler = (id) => {
+    setFollowLoading(true)
+    followUser(id) 
+      .then((res) => {
+        const newUsers = []
+        users.map((item) => {
+          if (item._id === id) {
+            newUsers.push(res.data.payload)
+          } else {
+            newUsers.push(item)
+          }
+        })
+        setUsers(newUsers)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setFollowLoading(false))
+  }
+
+  const unFollowingHandler = (id) => {
+    setFollowLoading(true)
+    unFollowUser(id) 
+      .then((res) => {
+        const newUsers = []
+        users.map((item) => {
+          if (item._id === id) {
+            newUsers.push(res.data.payload)
+          } else {
+            newUsers.push(item)
+          }
+        })
+        setUsers(newUsers)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setFollowLoading(false))
+  }
+
   return (
     <div className='sidebar'>
 
@@ -67,9 +108,9 @@ const Sidebar = () => {
                 <span className='text-blue font-medium text-sm cursor-pointer'>
                   {
                     item?.followers?.findIndex((x) => x?._id === user?._id) === -1 ? (
-                      <button>Follow</button>
+                      <button className='disabled:opacity-50' disabled={followLoading} onClick={() => followingHandler(item?._id)}>Follow</button>
                       ) : (
-                        <button>Unfollow</button>
+                        <button className='disabled:opacity-50' disabled={followLoading} onClick={() => unFollowingHandler(item?._id)}>Unfollow</button>
                     )
                   }
                 </span>
