@@ -6,7 +6,7 @@ const { createPost, getAllPosts, getMyPosts, updatePost, deletePost, getMySubPos
 const { checkValidPost } = require("../middlewares/checkValidPost.middleware")
 const { checkValidUser } = require("../middlewares/checkValidUser.middleware")
 
-router.get("/all", checkAuth, getAllPosts)
+router.get("/all", getAllPosts)
 router.get("/myposts", checkAuth, getMyPosts)
 router.get("/mysubpost", checkAuth, getMySubPost)
 router.get("/:id", checkAuth, checkValidPost, getSinglePost)
